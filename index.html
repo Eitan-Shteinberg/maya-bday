@@ -481,7 +481,6 @@
   function blowCandle(candle){
     if(candle.classList.contains('out')) return;
     candle.classList.add('out');
-    blip(520, 70);
     blownOut++;
     var rect = candle.getBoundingClientRect();
     burst(rect.left + rect.width/2, rect.top, 8, {up:true, power:0.7});
@@ -490,7 +489,9 @@
       cakeHint.textContent = 'You did it! 🌟';
       wish.classList.add('show');
       setTimeout(celebrate, 150);
-      playTada();
+      playFanfare();
+    } else {
+      playPop(blownOut);
     }
   }
   candles.forEach(function(c){
@@ -655,26 +656,45 @@
   /* =================== SOUND (Web Audio) =================== */
   var actx = null;
   function audio(){
-    if(actx) return actx;
-    try{ var AC = window.AudioContext || window.webkitAudioContext; actx = new AC(); }catch(e){ actx = null; }
+    try{
+      if(!actx){ var AC = window.AudioContext || window.webkitAudioContext; actx = new AC(); }
+      if(actx.state === 'suspended' && actx.resume){ actx.resume(); }
+    }catch(e){ actx = null; }
     return actx;
   }
-  function blip(freq, delay){
-    if(reduceMotion) return;
-    setTimeout(function(){
-      var ac = audio(); if(!ac) return;
-      var o = ac.createOscillator(), g = ac.createGain();
-      o.type = 'triangle'; o.frequency.value = freq;
-      g.gain.setValueAtTime(0.0001, ac.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.18, ac.currentTime + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.28);
-      o.connect(g); g.connect(ac.destination);
-      o.start(); o.stop(ac.currentTime + 0.3);
-    }, delay || 0);
+  // a warm, happy bell-like note (sine + shimmering octave) scheduled at +when sec
+  function chime(freq, when, dur, peak){
+    var ac = audio(); if(!ac) return;
+    var t0 = ac.currentTime + (when || 0);
+    dur = dur || 0.5; peak = peak || 0.22;
+    var g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    g.connect(ac.destination);
+    var o1 = ac.createOscillator(); o1.type = 'sine'; o1.frequency.value = freq; o1.connect(g);
+    var o2 = ac.createOscillator(); o2.type = 'triangle'; o2.frequency.value = freq * 2;
+    var g2 = ac.createGain(); g2.gain.value = 0.3; o2.connect(g2); g2.connect(g);
+    o1.start(t0); o2.start(t0);
+    o1.stop(t0 + dur + 0.05); o2.stop(t0 + dur + 0.05);
   }
-  function playTada(){
-    var notes = [523.25, 659.25, 783.99, 1046.5];
-    notes.forEach(function(f, i){ blip(f, i*110); });
+  // cheerful ascending do-re-mi as each candle is blown out
+  var POP_NOTES = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
+  function playPop(n){
+    if(reduceMotion) return;
+    chime(POP_NOTES[Math.min(Math.max(n,1) - 1, POP_NOTES.length - 1)], 0, 0.55, 0.24);
+  }
+  // joyful little fanfare when all the candles are out
+  function playFanfare(){
+    if(reduceMotion) return;
+    var run = [392.00, 523.25, 659.25, 783.99, 1046.50]; // G4 C5 E5 G5 C6
+    for(var i=0;i<run.length;i++){ chime(run[i], i*0.085, 0.5, 0.20); }
+    var t = run.length * 0.085;
+    // bright C-major chord finish
+    chime(523.25, t, 1.1, 0.15); chime(659.25, t, 1.1, 0.15); chime(783.99, t, 1.1, 0.15);
+    // little sparkle on top
+    chime(1318.51, t + 0.10, 0.5, 0.12);
+    chime(1567.98, t + 0.22, 0.5, 0.10);
   }
 
   /* =================== BACKGROUND MUSIC =================== */
