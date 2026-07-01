@@ -22,5 +22,5 @@ link and opened on phones.
 
 ## Editing
 Everything lives in `index.html`. To change the date/time, update the countdown
-target and the calendar block (search for `2026-07-29`). `preview.png` is the
-social/link-preview image.
+target and the calendar block (search for `2026-07-29`). `preview.jpg` is the
+social/link-preview image; `maya.jpg` is the hero photo.
