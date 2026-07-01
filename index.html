@@ -4,21 +4,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
 <title>Maya is turning 3! 🎉 You're invited</title>
-<meta name="description" content="Join us to celebrate Maya's 3rd birthday — Wednesday, July 29 at 4:00 PM, Lake Hills Park, Bellevue. Tap to open your invitation!" />
+<meta name="description" content="Join us to celebrate Maya's 3rd birthday — Friday, July 31 at 3:00 PM, Lake Hills Park, Bellevue. Tap to open your invitation!" />
 
 <!-- WhatsApp / social link preview -->
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Maya is turning 3! 🎉" />
-<meta property="og:description" content="You're invited! Wed, July 29 · 4:00 PM · Lake Hills Park, Bellevue. Tap to open your invitation 🎈" />
+<meta property="og:description" content="You're invited! Fri, July 31 · 3:00 PM · Lake Hills Park, Bellevue. Tap to open your invitation 🎈" />
 <meta property="og:image" content="https://eitan-shteinberg.github.io/maya-bday/preview.jpg" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Maya is turning 3 — Wed, July 29, Lake Hills Park, Bellevue" />
+<meta property="og:image:alt" content="Maya is turning 3 — Fri, July 31, Lake Hills Park, Bellevue" />
 <meta property="og:url" content="https://eitan-shteinberg.github.io/maya-bday/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Maya is turning 3! 🎉" />
-<meta name="twitter:description" content="You're invited! Wed, July 29 · 4:00 PM · Lake Hills Park, Bellevue 🎈" />
+<meta name="twitter:description" content="You're invited! Fri, July 31 · 3:00 PM · Lake Hills Park, Bellevue 🎈" />
 <meta name="twitter:image" content="https://eitan-shteinberg.github.io/maya-bday/preview.jpg" />
 
 <meta name="theme-color" content="#ff4fa3" />
@@ -119,10 +119,36 @@
   @keyframes photoPop{ from{ opacity:0; transform:scale(.55) translateY(10px);} to{ opacity:1; transform:none;} }
   @keyframes floaty2{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-6px);} }
 
+  /* keep hero text + photo above the (now tappable) balloons */
+  .hero .eyebrow, .hero-photo, .hero .name, .hero .turning{ position:relative; z-index:2; }
+  .hero .scroll-cue{ z-index:2; }
+
+  /* mic listening pulse */
+  .mic-btn.listening{ animation:micPulse 1.1s ease-in-out infinite; }
+  @keyframes micPulse{ 0%,100%{ transform:scale(1); box-shadow:0 0 0 0 rgba(255,79,163,.5); }
+    50%{ transform:scale(1.05); box-shadow:0 0 0 10px rgba(255,79,163,0); } }
+
+  /* thank-you-from-Maya speech bubble */
+  .maya-thanks{ display:flex; align-items:center; gap:12px; justify-content:center; margin-top:16px; }
+  .maya-thanks[hidden]{ display:none; }
+  .maya-thanks img{ width:54px; height:54px; border-radius:50%; object-fit:cover; object-position:50% 14%;
+    border:2.5px solid #fff; box-shadow:0 6px 14px -6px rgba(255,79,163,.6); flex:0 0 auto; }
+  .maya-thanks .bubble{ position:relative; background:#fff; border:1.5px solid var(--card-brd);
+    border-radius:16px; padding:10px 14px; font-size:15px; font-weight:600; color:var(--ink);
+    text-align:left; line-height:1.32; box-shadow:0 8px 18px -12px rgba(80,40,90,.5); }
+  .maya-thanks .bubble::before{ content:""; position:absolute; left:-8px; top:50%; transform:translateY(-50%);
+    border:7px solid transparent; border-right-color:#fff; }
+  .maya-thanks .bubble span{ color:var(--pink); font-weight:700; }
+
+  /* replay button row */
+  .replay-row{ margin-top:14px; }
+  .replay-row[hidden]{ display:none; }
+
   /* balloons */
-  .balloons{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:-1; }
+  .balloons{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1; }
   .balloon{ position:absolute; width:54px; height:66px; border-radius:50% 50% 48% 48%;
-    opacity:.92; box-shadow:inset -8px -8px 0 rgba(0,0,0,.06); animation:floaty 7s ease-in-out infinite; }
+    opacity:.92; box-shadow:inset -8px -8px 0 rgba(0,0,0,.06); animation:floaty 7s ease-in-out infinite;
+    pointer-events:auto; cursor:pointer; }
   .balloon::after{ content:""; position:absolute; left:50%; bottom:-34px; width:1px; height:34px; background:rgba(80,60,120,.35); transform:translateX(-50%); }
   .balloon::before{ content:""; position:absolute; left:50%; bottom:-6px; transform:translateX(-50%);
     border-left:6px solid transparent; border-right:6px solid transparent; border-bottom:8px solid currentColor; }
@@ -138,10 +164,10 @@
   /* ====== CAKE ====== */
   .cake-section{ text-align:center; }
   .cake-hint{ color:var(--ink-soft); font-size:clamp(14px,4.2vw,17px); margin:2px 0 18px; font-weight:500; }
-  .cake-stage{ position:relative; width:min(78vw,300px); margin:0 auto 6px; cursor:pointer; }
+  .cake-stage{ position:relative; width:min(78vw,300px); margin:0 auto 6px; cursor:pointer; touch-action:manipulation; }
   .cake{ position:relative; width:100%; aspect-ratio:1/0.9; }
   .candles{ position:absolute; top:-2%; left:0; width:100%; height:42%; display:flex; align-items:flex-end; justify-content:center; gap:18%; }
-  .candle{ position:relative; width:11px; padding:0 16px; display:flex; flex-direction:column; align-items:center; cursor:pointer; }
+  .candle{ position:relative; width:11px; padding:0 16px; display:flex; flex-direction:column; align-items:center; cursor:pointer; touch-action:manipulation; }
   .candle .stick{ width:11px; height:46px; border-radius:4px;
     background:repeating-linear-gradient(45deg,#ff5fa2 0 7px,#fff0f6 7px 14px); box-shadow:0 4px 8px rgba(0,0,0,.12); }
   .flame{ position:relative; width:16px; height:24px; margin-bottom:3px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
@@ -279,6 +305,13 @@
         </div>
       </div>
       <div class="wish" id="wish">🎉 Yay! Your wish will come true! 🎉</div>
+      <div class="maya-thanks" id="mayaThanks" hidden>
+        <img src="maya.jpg" alt="Maya" />
+        <div class="bubble">Yay! Thank you for coming!<br><span>💛 love, Maya</span></div>
+      </div>
+      <div class="replay-row" id="replayRow" hidden>
+        <button class="btn ghost small" id="relightBtn">🔥 Light them again</button>
+      </div>
       <button class="btn ghost small mic-btn" id="micBtn" style="display:none">🎤 Blow into your mic</button>
     </section>
 
@@ -296,8 +329,8 @@
     <!-- ===== WHEN ===== -->
     <section class="card section">
       <h2><span class="emoji">📅</span> When</h2>
-      <div class="info-row"><span class="big">Wednesday, July 29</span></div>
-      <div class="info-row"><span class="big">4:00 PM</span><span class="muted">· 2026</span></div>
+      <div class="info-row"><span class="big">Friday, July 31</span></div>
+      <div class="info-row"><span class="big">3:00 PM</span><span class="muted">· 2026</span></div>
     </section>
 
     <!-- ===== WHERE ===== -->
@@ -461,12 +494,13 @@
     check();
   }
 
-  /* =================== BALLOONS =================== */
-  (function buildBalloons(){
+  /* =================== BALLOONS (tap to pop!) =================== */
+  (function balloons(){
     var wrap = document.getElementById('balloons');
+    if(!wrap) return;
     var cols = ['#ff5fa2','#8b5cf6','#14d3c6','#ffd23f','#ff7a59','#38bdf8'];
     var n = reduceMotion ? 4 : 7;
-    for(var i=0;i<n;i++){
+    function makeBalloon(i){
       var b = document.createElement('div');
       b.className = 'balloon';
       var c = cols[i % cols.length];
@@ -478,8 +512,25 @@
       b.style.animationDuration = (5.5 + Math.random()*4) + 's';
       b.style.animationDelay = (-Math.random()*5) + 's';
       b.style.opacity = 0.82;
+      b.addEventListener('click', function(e){ e.stopPropagation(); popBalloon(b, i); });
       wrap.appendChild(b);
+      return b;
     }
+    function popBalloon(b, i){
+      if(b.dataset.popped) return;
+      b.dataset.popped = '1';
+      var r = b.getBoundingClientRect();
+      burst(r.left + r.width/2, r.top + r.height/2, 14, {power:1.0});
+      playPopBalloon();
+      buzz(12);
+      b.style.transition = 'transform .13s ease, opacity .13s ease';
+      b.style.transform += ' scale(1.3)';
+      b.style.opacity = '0';
+      setTimeout(function(){ if(b.parentNode) b.parentNode.removeChild(b); }, 150);
+      // float a fresh one in so there's always something to pop
+      if(!reduceMotion) setTimeout(function(){ makeBalloon(i); }, 2600);
+    }
+    for(var i=0;i<n;i++){ makeBalloon(i); }
   })();
 
   /* scroll parallax for balloons */
@@ -496,23 +547,39 @@
   var cakeStage = document.getElementById('cakeStage');
   var cakeHint = document.getElementById('cakeHint');
   var wish = document.getElementById('wish');
+  var mayaThanks = document.getElementById('mayaThanks');
+  var replayRow = document.getElementById('replayRow');
+  var relightBtn = document.getElementById('relightBtn');
   var blownOut = 0, celebrated = false;
+  var HINT_DEFAULT = cakeHint.textContent;
 
   function blowCandle(candle){
     if(candle.classList.contains('out')) return;
     candle.classList.add('out');
     blownOut++;
+    buzz(18);
     var rect = candle.getBoundingClientRect();
     burst(rect.left + rect.width/2, rect.top, 8, {up:true, power:0.7});
     if(blownOut === candles.length && !celebrated){
       celebrated = true;
       cakeHint.textContent = 'You did it! 🌟';
       wish.classList.add('show');
+      if(mayaThanks) mayaThanks.hidden = false;
+      if(replayRow) replayRow.hidden = false;
       setTimeout(celebrate, 150);
-      playFanfare();
+      buzz([40,60,140]);
+      playHappyBirthday();
     } else {
       playPop(blownOut);
     }
+  }
+  function relightCandles(){
+    candles.forEach(function(c){ c.classList.remove('out'); });
+    blownOut = 0; celebrated = false;
+    cakeHint.textContent = HINT_DEFAULT;
+    wish.classList.remove('show');
+    if(mayaThanks) mayaThanks.hidden = true;
+    if(replayRow) replayRow.hidden = true;
   }
   candles.forEach(function(c){
     c.addEventListener('click', function(e){ e.stopPropagation(); blowCandle(c); });
@@ -521,6 +588,9 @@
     // tapping the cake blows the next lit candle
     for(var i=0;i<candles.length;i++){ if(!candles[i].classList.contains('out')){ blowCandle(candles[i]); break; } }
   });
+  if(relightBtn){
+    relightBtn.addEventListener('click', function(e){ e.stopPropagation(); relightCandles(); });
+  }
 
   /* place sprinkles on the cake */
   (function sprinkles(){
@@ -541,50 +611,69 @@
     });
   })();
 
-  /* mic blow (optional enhancement) */
+  /* mic blow (optional, hardened) */
   var micBtn = document.getElementById('micBtn');
-  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+  if(micBtn && navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
     micBtn.style.display = '';
-    micBtn.addEventListener('click', function(){
-      micBtn.disabled = true; micBtn.textContent = '🎤 Listening… blow!';
-      navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    var micBusy = false;
+    micBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(micBusy) return;
+      micBusy = true;
+      micBtn.disabled = true;
+      micBtn.textContent = '🎤 Allow mic…';
+      navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}})
+      .then(function(stream){
+        micBtn.disabled = false;
+        micBtn.classList.add('listening');
+        micBtn.textContent = '🌬️ Blow now!';
         var AC = window.AudioContext || window.webkitAudioContext;
         var ac = new AC();
+        if(ac.state === 'suspended' && ac.resume){ ac.resume(); }
         var src = ac.createMediaStreamSource(stream);
-        var an = ac.createAnalyser(); an.fftSize = 512;
+        var an = ac.createAnalyser(); an.fftSize = 1024; an.smoothingTimeConstant = 0.5;
         src.connect(an);
-        var data = new Uint8Array(an.frequencyBinCount);
-        var stop = false;
+        var data = new Uint8Array(an.fftSize);
+        var loud = 0, cool = 0, stopped = false;
+        function done(){
+          if(stopped) return; stopped = true;
+          try{ stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+          try{ ac.close(); }catch(e){}
+          micBtn.classList.remove('listening');
+          micBtn.style.display = 'none';
+        }
         function listen(){
-          if(stop) return;
+          if(stopped) return;
+          if(blownOut >= candles.length){ done(); return; }
           an.getByteTimeDomainData(data);
           var sum = 0;
           for(var i=0;i<data.length;i++){ var v=(data[i]-128)/128; sum += v*v; }
           var rms = Math.sqrt(sum/data.length);
-          if(rms > 0.18){
-            var next = candles.filter(function(c){ return !c.classList.contains('out'); })[0];
-            if(next) blowCandle(next);
-          }
-          if(blownOut >= candles.length){ stop = true; cleanup(); return; }
+          if(cool > 0){ cool--; }
+          else if(rms > 0.17){
+            loud++;
+            if(loud >= 4){                 // sustained blow, not a blip
+              var next = candles.filter(function(c){ return !c.classList.contains('out'); })[0];
+              if(next) blowCandle(next);
+              loud = 0; cool = 42;          // ~0.7s cooldown: one breath = one candle
+            }
+          } else if(loud > 0){ loud--; }
           requestAnimationFrame(listen);
         }
-        function cleanup(){
-          stop = true;
-          stream.getTracks().forEach(function(t){ t.stop(); });
-          try{ ac.close(); }catch(e){}
-          micBtn.style.display = 'none';
-        }
         listen();
-        setTimeout(cleanup, 12000);
-      }).catch(function(){
-        micBtn.textContent = '🎤 Mic unavailable — just tap!';
+        setTimeout(done, 15000);
+      })
+      .catch(function(){
+        micBusy = false;
+        micBtn.classList.remove('listening');
         micBtn.disabled = false;
+        micBtn.textContent = '🎤 Mic blocked — just tap the candles!';
       });
     });
   }
 
   /* =================== COUNTDOWN =================== */
-  var target = new Date('2026-07-29T16:00:00-07:00').getTime();
+  var target = new Date('2026-07-31T15:00:00-07:00').getTime();
   var cdD=document.getElementById('cd-d'), cdH=document.getElementById('cd-h'),
       cdM=document.getElementById('cd-m'), cdS=document.getElementById('cd-s');
   function pad(n){ return (n<10?'0':'')+n; }
@@ -609,9 +698,9 @@
     title: "Maya's 3rd Birthday Party 🎉",
     desc: "Come celebrate Maya turning 3! Tap to open the invitation: https://eitan-shteinberg.github.io/maya-bday/",
     loc: "Lake Hills Park, 164th Ave SE & SE 12th St, Bellevue, WA 98008",
-    // 4:00 PM PDT = 23:00 UTC ; 6:30 PM PDT = 01:30 UTC next day
-    startUTC: "20260729T230000Z",
-    endUTC:   "20260730T013000Z"
+    // 3:00 PM PDT = 22:00 UTC ; 5:30 PM PDT = 00:30 UTC next day
+    startUTC: "20260731T220000Z",
+    endUTC:   "20260801T003000Z"
   };
   var addCalBtn = document.getElementById('addCalBtn');
   var calMenu = document.getElementById('calMenu');
@@ -650,7 +739,7 @@
   var shareBtn = document.getElementById('shareBtn');
   var shareData = {
     title: "Maya is turning 3! 🎉",
-    text: "You're invited to Maya's 3rd birthday! 🎈 Wed, July 29 · 4:00 PM · Lake Hills Park, Bellevue.",
+    text: "You're invited to Maya's 3rd birthday! 🎈 Fri, July 31 · 3:00 PM · Lake Hills Park, Bellevue.",
     url: "https://eitan-shteinberg.github.io/maya-bday/"
   };
   shareBtn.addEventListener('click', function(){
@@ -701,21 +790,57 @@
   // cheerful ascending do-re-mi as each candle is blown out
   var POP_NOTES = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
   function playPop(n){
-    if(reduceMotion) return;
     chime(POP_NOTES[Math.min(Math.max(n,1) - 1, POP_NOTES.length - 1)], 0, 0.55, 0.24);
   }
-  // joyful little fanfare when all the candles are out
-  function playFanfare(){
-    if(reduceMotion) return;
-    var run = [392.00, 523.25, 659.25, 783.99, 1046.50]; // G4 C5 E5 G5 C6
-    for(var i=0;i<run.length;i++){ chime(run[i], i*0.085, 0.5, 0.20); }
-    var t = run.length * 0.085;
-    // bright C-major chord finish
-    chime(523.25, t, 1.1, 0.15); chime(659.25, t, 1.1, 0.15); chime(783.99, t, 1.1, 0.15);
-    // little sparkle on top
-    chime(1318.51, t + 0.10, 0.5, 0.12);
-    chime(1567.98, t + 0.22, 0.5, 0.10);
+  // the real "Happy Birthday" tune (public domain) once all candles are out
+  function playHappyBirthday(){
+    var G=392.00,A=440.00,B=493.88,C=523.25,D=587.33,E=659.25,F=698.46,hi=783.99;
+    var song = [ // [freq, beats]
+      [G,0.75],[G,0.25],[A,1],[G,1],[C,1],[B,2],
+      [G,0.75],[G,0.25],[A,1],[G,1],[D,1],[C,2],
+      [G,0.75],[G,0.25],[hi,1],[E,1],[C,1],[B,1],[A,1],
+      [F,0.75],[F,0.25],[E,1],[C,1],[D,1],[C,2]
+    ];
+    var beat = 0.34, t = 0;
+    for(var i=0;i<song.length;i++){
+      chime(song[i][0], t, Math.max(song[i][1]*beat*0.95, 0.16), 0.20);
+      t += song[i][1]*beat;
+    }
+    // sparkle tail
+    chime(1318.51, t + 0.05, 0.5, 0.12);
+    chime(1567.98, t + 0.18, 0.5, 0.10);
   }
+  // quick "pop!" when a balloon is tapped
+  function playPopBalloon(){
+    var ac = audio(); if(!ac) return;
+    var t0 = ac.currentTime;
+    var g = ac.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
+    g.connect(ac.destination);
+    var o = ac.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(880, t0);
+    o.frequency.exponentialRampToValueAtTime(200, t0 + 0.13);
+    o.connect(g); o.start(t0); o.stop(t0 + 0.16);
+  }
+  // haptic feedback (Android); silently ignored where unsupported / reduced-motion
+  function buzz(pattern){
+    try{ if(!reduceMotion && navigator.vibrate) navigator.vibrate(pattern); }catch(e){}
+  }
+  // iOS Safari: unlock + resume audio on the first user gesture so nothing is silent
+  var audioUnlocked = false;
+  function unlockAudio(){
+    if(audioUnlocked) return; audioUnlocked = true;
+    var ac = audio(); if(!ac) return;
+    try{
+      var b = ac.createBuffer(1, 1, 22050);
+      var s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(0);
+    }catch(e){}
+  }
+  ['pointerdown','touchstart','click','keydown'].forEach(function(ev){
+    window.addEventListener(ev, unlockAudio, {passive:true});
+  });
 
   /* =================== BACKGROUND MUSIC =================== */
   var musicBtn = document.getElementById('musicBtn');
